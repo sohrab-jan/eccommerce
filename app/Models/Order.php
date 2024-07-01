@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    protected $guarded =[];
+    protected $guarded = [];
 
     public function user(): BelongsTo
     {

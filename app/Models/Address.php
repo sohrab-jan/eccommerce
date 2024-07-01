@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-    protected $guarded =[];
+    protected $guarded = [];
 
     public function order()
     {
@@ -15,6 +15,6 @@ class Address extends Model
 
     public function getFullNameAttribute()
     {
-        return $this->first_name .' '.$this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 }

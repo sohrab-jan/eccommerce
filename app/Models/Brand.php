@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Brand extends Model
 {
-    protected $guarded =[];
+    protected $guarded = [];
 
     public function products(): HasMany
     {

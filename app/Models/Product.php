@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-    protected $guarded =[];
+    protected $guarded = [];
 
-    protected $casts =[
-        'images'=>'array'
+    protected $casts = [
+        'images' => 'array',
     ];
 
     public function category(): BelongsTo
