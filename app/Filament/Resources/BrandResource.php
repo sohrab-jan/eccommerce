@@ -10,9 +10,11 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Str;
 
 class BrandResource extends Resource
 {
@@ -32,13 +34,14 @@ class BrandResource extends Resource
                                 ->maxLength(255)
                                 ->live(onBlur: true)
                                 ->dehydrated()
-                            /*->afterStateUpdated(function ($state, Set $set) {
+                                ->afterStateUpdated(function ($state, Set $set) {
                                     $set('slug', Str::slug($state));
-                                })*/,
+                                }),
 
                             TextInput::make('slug')
-                                ->maxLength(255),
-                            //                                ->disabled()
+                                ->maxLength(255)
+                                ->disabled()
+                                ->dehydrated(),
 
                         ]),
                     FileUpload::make('image')

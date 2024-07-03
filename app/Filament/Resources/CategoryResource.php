@@ -34,13 +34,14 @@ class CategoryResource extends Resource
                                 ->maxLength(255)
                                 ->live(onBlur: true)
                                 ->dehydrated()
-                            /*->afterStateUpdated(function ($state, Set $set) {
+                                ->afterStateUpdated(function ($state, Set $set) {
                                     $set('slug', Str::slug($state));
-                                })*/,
+                                }),
 
                             TextInput::make('slug')
                                 ->maxLength(255)
-//                                ->disabled()
+                                ->disabled()
+                                ->dehydrated()
                                 ->unique(Category::class, 'slug', ignoreRecord: true),
                         ]),
                     FileUpload::make('image')
