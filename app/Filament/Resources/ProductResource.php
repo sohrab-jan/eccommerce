@@ -3,12 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
-use App\Models\Category;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
@@ -18,9 +15,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
 class ProductResource extends Resource
@@ -35,53 +31,60 @@ class ProductResource extends Resource
             ->schema([
                 Group::make()->schema([
                     Section::make('Product Information')->schema([
-                        TextInput::make('name')->required()->maxLength(255),
-                        TextInput::make('slug')
+                        TextInput::make('name')
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                        ->afterStateUpdated(function (string $operation,$state,Forms\Set $set){
-                            if ($operation === 'create'){
-                                $set('slug',Str::slug($state));
-                            }
-                        }),
-                        MarkdownEditor::make('description')->columnSpanFull()
-                        ->fileAttachmentsDirectory('products')
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ($operation === 'create') {
+                                    $set('slug', Str::slug($state));
+                                }
+                            }),
+                        TextInput::make('slug')
+                            ->required()
+                            ->disabled()
+                            ->dehydrated()
+                            ->unique(Product::class, 'slug', ignoreRecord: true)
+                            ->maxLength(255),
+
+                        MarkdownEditor::make('description')
+                            ->columnSpanFull()
+                            ->fileAttachmentsDirectory('products'),
                     ])->columns(2),
                     Section::make('Images')->schema([
                         FileUpload::make('images')
                             ->multiple()
                             ->directory('products')
                             ->maxFiles(5)
-                            ->reorderable()
-                    ])
+                            ->reorderable(),
+                    ]),
                 ])->columnSpan(2),
                 Group::make()->schema([
                     Section::make('price')->schema([
                         TextInput::make('price')
-                        ->numeric()
-                        ->required()
-                        ->prefix('USD')
+                            ->numeric()
+                            ->required()
+                            ->prefix('USD'),
                     ]),
                     Section::make('Associations')->schema([
                         Select::make('category_id')
                             ->searchable()
                             ->required()
                             ->preload()
-                            ->relationship('category','name'),
+                            ->relationship('category', 'name'),
                         Select::make('brand_id')
                             ->searchable()
                             ->required()
                             ->preload()
-                            ->relationship('brand','name')
+                            ->relationship('brand', 'name'),
                     ]),
                     Section::make('status')->schema([
                         Toggle::make('in_stock')->required()->default(true),
                         Toggle::make('is_active')->required()->default(true),
                         Toggle::make('is_featured')->required(),
                         Toggle::make('on_sale')->required(),
-                    ])
-                ])->columnSpan(1)
+                    ]),
+                ])->columnSpan(1),
             ])->columns(3);
     }
 
@@ -91,10 +94,14 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('slug')->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\TextColumn::make('category.name')->sortable(),
+                Tables\Columns\TextColumn::make('brand.name')->sortable(),
+                Tables\Columns\TextColumn::make('price')->money('USD')->sortable(),
+                Tables\Columns\ImageColumn::make('images'),
                 Tables\Columns\IconColumn::make('is_active')->boolean(),
                 Tables\Columns\IconColumn::make('is_featured')->boolean(),
                 Tables\Columns\IconColumn::make('in_stock')->boolean(),
+                Tables\Columns\IconColumn::make('on_sale')->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -105,14 +112,16 @@ class ProductResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('category')->relationship('category', 'name'),
+                SelectFilter::make('brand')->relationship('brand', 'name'),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                ]),            ])
+                ]),
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
