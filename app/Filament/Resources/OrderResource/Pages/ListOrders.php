@@ -18,21 +18,23 @@ class ListOrders extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
     protected function getHeaderWidgets(): array
     {
         return [
-            OrderStats::class
+            OrderStats::class,
         ];
     }
+
     public function getTabs(): array
     {
         return [
             null => Tab::make('All'),
-            'new' => Tab::make('New')->query(fn($query)=>$query->where('status','new')),
-            'shipped' => Tab::make('Shipped')->query(fn($query)=>$query->where('status','shipped')),
-            'processing' => Tab::make('Processing')->query(fn($query)=>$query->where('status','processing')),
-            'delivered' => Tab::make('Delivered')->query(fn($query)=>$query->where('status','delivered')),
-            'canceled' => Tab::make('Canceled')->query(fn($query)=>$query->where('status','canceled')),
+            'new' => Tab::make('New')->query(fn ($query) => $query->where('status', 'new')),
+            'shipped' => Tab::make('Shipped')->query(fn ($query) => $query->where('status', 'shipped')),
+            'processing' => Tab::make('Processing')->query(fn ($query) => $query->where('status', 'processing')),
+            'delivered' => Tab::make('Delivered')->query(fn ($query) => $query->where('status', 'delivered')),
+            'canceled' => Tab::make('Canceled')->query(fn ($query) => $query->where('status', 'canceled')),
         ];
     }
 }

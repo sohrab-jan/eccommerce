@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\OrderResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -11,8 +9,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AddressRelationManager extends RelationManager
 {
@@ -60,22 +56,22 @@ class AddressRelationManager extends RelationManager
             ->recordTitleAttribute('street_address')
             ->columns([
                 TextColumn::make('fullname')
-                ->label('Full Name'),
+                    ->label('Full Name'),
 
                 TextColumn::make('phone')
-                ->label('Phone'),
+                    ->label('Phone'),
 
                 TextColumn::make('city')
-                ->label('City'),
+                    ->label('City'),
 
                 TextColumn::make('state')
-                ->label('State'),
+                    ->label('State'),
 
                 TextColumn::make('zip_code')
-                ->label('Zipcode'),
+                    ->label('Zipcode'),
 
                 TextColumn::make('street_address')
-                ->label('Street Address'),
+                    ->label('Street Address'),
             ])
             ->filters([
                 //
