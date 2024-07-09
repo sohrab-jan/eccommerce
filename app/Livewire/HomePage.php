@@ -10,13 +10,11 @@ use Livewire\Component;
 class HomePage extends Component
 {
     #[Title('Home')]
-
-
     public function render()
     {
         return view('livewire.home-page', [
-            'categories' => Category::where('is_active',true)->get(),
-            'brands' => Brand::where('is_active',true)->get(),
+            'categories' => Category::where('is_active', true)->get(),
+            'brands' => Brand::where('is_active', true)->get(),
         ]);
     }
 }
