@@ -13,7 +13,7 @@
         <main>
             {{ $slot }}
         </main>
-    @livewireScripts
     @livewire('partial.footer')
+    @livewireScripts
     </body>
 </html>
