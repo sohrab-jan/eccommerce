@@ -10,7 +10,11 @@
                             @foreach($categories as $category)
                                 <li class="mb-4" wire:key="{{$category->id}}">
                                     <label for="{{$category->slug}}" class="flex items-center dark:text-gray-400">
-                                        <input type="checkbox" class="w-4 h-4 mr-2" id="{{$category->slug}}" value="{{$category->id}}" >
+                                        <input
+                                            wire:model.live="selected_categories"
+                                            type="checkbox" class="w-4 h-4 mr-2"
+                                            id="{{$category->slug}}" value="{{$category->id}}"
+                                        >
                                         <span class="text-lg">{{$category->name}}</span>
                                     </label>
                                 </li>
@@ -25,7 +29,10 @@
                             @foreach($brands as $brand)
                                 <li class="mb-4" wire:key="{{$brand->id}}">
                                     <label for="{{$brand->slug}}" class="flex items-center dark:text-gray-300">
-                                        <input type="checkbox" class="w-4 h-4 mr-2" value="{{$brand->id}}" id="{{$brand->slug}}">
+                                        <input
+                                            type="checkbox" class="w-4 h-4 mr-2" value="{{$brand->id}}"
+                                            id="{{$brand->slug}}" wire:model.live="selected_brands"
+                                        >
                                         <span class="text-lg dark:text-gray-400">{{$brand->name}}</span>
                                     </label>
                                 </li>
@@ -38,14 +45,23 @@
                         <div class="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
                         <ul>
                             <li class="mb-4">
-                                <label for="" class="flex items-center dark:text-gray-300">
-                                    <input type="checkbox" class="w-4 h-4 mr-2">
-                                    <span class="text-lg dark:text-gray-400">In Stock</span>
+                                <label for="featured" class="flex items-center dark:text-gray-300">
+                                    <input
+                                        wire:model.live="featured"
+                                        type="checkbox"
+                                        class="w-4 h-4 mr-2"
+                                        id="featured"
+                                        value="1"
+                                    >
+                                    <span class="text-lg dark:text-gray-400">Featured Products</span>
                                 </label>
                             </li>
                             <li class="mb-4">
-                                <label for="" class="flex items-center dark:text-gray-300">
-                                    <input type="checkbox" class="w-4 h-4 mr-2">
+                                <label for="sale" class="flex items-center dark:text-gray-300">
+                                    <input
+                                        wire:model.live="sale"
+                                        type="checkbox" class="w-4 h-4 mr-2" id="sale" value="1"
+                                    >
                                     <span class="text-lg dark:text-gray-400">On Sale</span>
                                 </label>
                             </li>

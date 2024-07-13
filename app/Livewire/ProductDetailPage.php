@@ -18,6 +18,6 @@ class ProductDetailPage extends Component
     #[Title('Product Detail')]
     public function render()
     {
-        return view('livewire.product-detail-page',['product'=>Product::where('slug',$this->slug)->first()]);
+        return view('livewire.product-detail-page', ['product' => Product::where('slug', $this->slug)->first()]);
     }
 }
