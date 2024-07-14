@@ -26,6 +26,9 @@ class ProductsPage extends Component
     #[Url]
     public $sale;
 
+    #[Url]
+    public $price_range = 30000;
+
     #[Title('Product')]
     public function render()
     {
@@ -38,11 +41,14 @@ class ProductsPage extends Component
         if (! empty($this->selected_brands)) {
             $productQuery->whereIn('brand_id', $this->selected_brands);
         }
-        if (! empty($this->featured)) {
+        if ($this->featured) {
             $productQuery->where('is_featured', 1);
         }
-        if (! empty($this->sale)) {
+        if ($this->sale) {
             $productQuery->where('on_sale', 1);
+        }
+        if ($this->price_range && $this->price_range = ! 30000) {
+            $productQuery->whereBetween('price', [0, $this->price_range]);
         }
 
         return view('livewire.products-page', [
