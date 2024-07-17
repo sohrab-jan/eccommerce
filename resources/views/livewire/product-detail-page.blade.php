@@ -3,7 +3,7 @@
         <div class="max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6">
             <div class="flex flex-wrap -mx-4">
                 <div class="w-full mb-8 md:w-1/2 md:mb-0" x-data="{ mainImage: '{{url('storage',$product->images[0])}}' }">
-                    <div class="sticky top-0 z-50 overflow-hidden ">
+                    <div class="sticky top-0 overflow-hidden ">
                         <div class="relative mb-6 lg:mb-10 lg:h-2/4 ">
                             <img x-bind:src="mainImage" alt="" class="object-cover w-full lg:h-full ">
                         </div>
@@ -51,7 +51,7 @@
                                     type="number" readonly class="flex items-center w-full font-semibold text-center
                                      text-gray-700 placeholder-gray-700 bg-gray-300 outline-none dark:text-gray-400
                                      dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none text-md
-                                     hover:text-black"{{-- placeholder="{{$quantity}}"--}} wire:model="quantity"
+                                     hover:text-black" {{-- placeholder="{{$quantity}}"--}} wire:model="quantity"
                                 >
                                 <button wire:click="increment" class="w-20 h-full text-gray-600 bg-gray-300 rounded-r outline-none cursor-pointer dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:text-gray-700 hover:bg-gray-400">
                                     <span class="m-auto text-2xl font-thin">+</span>
@@ -59,8 +59,12 @@
                             </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-4">
-                            <button class="w-full p-4 bg-blue-500 rounded-md lg:w-2/5 dark:text-gray-200 text-gray-50 hover:bg-blue-600 dark:bg-blue-500 dark:hover:bg-blue-700">
-                                Add to cart</button>
+                            <button
+                                wire:click="addToCart({{$product->id}})"
+                                class="w-full p-4 bg-blue-500 rounded-md lg:w-2/5 dark:text-gray-200 text-gray-50 hover:bg-blue-600 dark:bg-blue-500 dark:hover:bg-blue-700">
+                                <span wire:loading.remove>Add to cart</span>
+                                <span wire:loading>Adding ...</span>
+                            </button>
                         </div>
                     </div>
                 </div>

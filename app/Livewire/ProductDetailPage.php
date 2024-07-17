@@ -3,13 +3,18 @@
 namespace App\Livewire;
 
 use App\Helpers\CartManagement;
+use App\Livewire\Partial\Navbar;
 use App\Models\Product;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class ProductDetailPage extends Component
 {
+    use LivewireAlert;
+
     public string $slug;
+
     public $quantity = 1;
 
     public function mount(string $slug): void
@@ -21,11 +26,24 @@ class ProductDetailPage extends Component
     {
         $this->quantity++;
     }
+
     public function decrement()
     {
-        if ($this->quantity > 1){
+        if ($this->quantity > 1) {
             $this->quantity--;
         }
+    }
+
+    public function addToCart($productId)
+    {
+        $totalCount = CartManagement::addItemToCart($productId);
+        $this->dispatch('update-cart-count', totalCount: $totalCount)->to(Navbar::class);
+
+        $this->alert('success', 'Product added to cart successfully!', [
+            'position' => 'bottom-end',
+            'timer' => 3000,
+            'toast' => true,
+        ]);
     }
 
     #[Title('Product Detail')]

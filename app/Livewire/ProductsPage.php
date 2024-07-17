@@ -36,18 +36,18 @@ class ProductsPage extends Component
     #[Url]
     public $sort = 'latest';
 
-
     public function addToCart($productId)
     {
         $totalCount = CartManagement::addItemToCart($productId);
-        $this->dispatch('update-cart-count',totalCount:$totalCount)->to(Navbar::class);
+        $this->dispatch('update-cart-count', totalCount: $totalCount)->to(Navbar::class);
 
-        $this->alert('success', 'Product added to cart successfully!',[
-            'position' =>  'bottom-end',
-            'timer' =>  3000,
-            'toast' =>  true,
+        $this->alert('success', 'Product added to cart successfully!', [
+            'position' => 'bottom-end',
+            'timer' => 3000,
+            'toast' => true,
         ]);
     }
+
     #[Title('Product')]
     public function render()
     {
