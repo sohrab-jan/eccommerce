@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cookie;
 class CartManagement
 {
     //add item to cart
-    public static function addItemToCart($productId, $quantity)
+    public static function addItemToCart($productId, $quantity = 1)
     {
         $cart_items = self::getCartItemsFromCookie();
 
@@ -54,6 +54,8 @@ class CartManagement
             }
         }
         self::addCartItemToCookie($cartItems);
+
+        return $cartItems;
     }
 
     //add cart item to cookie
