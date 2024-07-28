@@ -18,7 +18,7 @@ class LoginPage extends Component
             'password' => 'required|min:6|max:255',
         ]);
         if(!auth()->attempt(['email' => $this->email, 'password' => $this->password])){
-         session()->flash('error','your credentials are wrong');
+         session()->flash('error','your credentials are wrong!');
          return;
         }
         return redirect()->intended();
