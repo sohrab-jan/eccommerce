@@ -10,7 +10,9 @@ use Livewire\Component;
 class RegisterPage extends Component
 {
     public $name;
+
     public $email;
+
     public $password;
 
     #[Title('Register')]
@@ -31,6 +33,7 @@ class RegisterPage extends Component
 
         return redirect()->intended();
     }
+
     public function render()
     {
         return view('livewire.auth.register-page');

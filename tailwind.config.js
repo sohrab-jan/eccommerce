@@ -1,3 +1,5 @@
+import colors from "tailwindcss/colors.js";
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -7,7 +9,11 @@ export default {
       'node_modules/preline/dist/*.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+        colors:{
+            'pink':colors.pink
+        }
+    },
   },
   plugins: [
       require('preline/plugin'),

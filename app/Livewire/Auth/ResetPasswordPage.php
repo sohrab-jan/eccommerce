@@ -10,13 +10,17 @@ use Illuminate\Support\Str;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+
 #[Title('Reset Password')]
 class ResetPasswordPage extends Component
 {
     public $token;
+
     #[Url]
     public $email;
+
     public $password;
+
     public $password_confirmation;
 
     public function resett()
@@ -32,23 +36,25 @@ class ResetPasswordPage extends Component
             'password' => $this->password,
             'password_confirmation' => $this->password_confirmation,
             'token' => $this->token,
-        ],function (User $user, string $password){
+        ], function (User $user, string $password) {
             $password = $this->password;
             $user->forceFill([
-                'password' => Hash::make($password)
+                'password' => Hash::make($password),
             ])->setRememberToken(Str::random(60));
             $user->save();
             event(new PasswordReset($user));
         });
+
         return $status === Password::PASSWORD_RESET ?
             redirect('/login')
-            : session()->flash('error','something went wrong, please try again');
+            : session()->flash('error', 'something went wrong, please try again');
     }
 
     public function mount($token)
     {
         $this->token = $token;
     }
+
     public function render()
     {
         return view('livewire.auth.reset-password-page');

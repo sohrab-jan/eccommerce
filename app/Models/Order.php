@@ -25,4 +25,30 @@ class Order extends Model
     {
         return $this->hasOne(Address::class);
     }
+
+    public function statusColor(): string
+    {
+        $color = match ($this->status) {
+            'new' => 'blue',
+            'processing' => 'yellow',
+            'shipped' => 'green',
+            'delivered' => 'pink',
+            'canceled' => 'red',
+            default => 'gray',
+        };
+
+        return $color;
+    }
+
+    public function paymentStatusColor(): string
+    {
+        $color = match ($this->payment_status) {
+            'pending' => 'blue',
+            'failed' => 'red',
+            'paid' => 'green',
+            default => 'yellow',
+        };
+
+        return $color;
+    }
 }

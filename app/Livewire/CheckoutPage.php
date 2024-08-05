@@ -3,31 +3,42 @@
 namespace App\Livewire;
 
 use App\Helpers\CartManagement;
+use App\Mail\OrderPlaced;
 use App\Models\Address;
 use App\Models\Order;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+
 #[Title('Checkout')]
 class CheckoutPage extends Component
 {
     public $first_name;
+
     public $last_name;
+
     public $phone;
+
     public $street_address;
+
     public $city;
+
     public $state;
+
     public $zip_code;
+
     public $payment_method;
 
     public function mount()
     {
         $cartItems = CartManagement::getCartItemsFromCookie();
 
-        if (count($cartItems) ===0){
+        if (count($cartItems) === 0) {
             return redirect('/products');
         }
     }
+
     public function placeOrder()
     {
         $this->validate([
@@ -43,14 +54,14 @@ class CheckoutPage extends Component
 
         $cartItems = CartManagement::getCartItemsFromCookie();
         $lineItems = [];
-        foreach ($cartItems as $cartItem){
-            $lineItems[] =[
-                'price_data'=>[
+        foreach ($cartItems as $cartItem) {
+            $lineItems[] = [
+                'price_data' => [
                     'currency' => 'usd',
                     'unit_amount' => $cartItem['unit_amount'] * 100,
-                    'product_data'=>[
+                    'product_data' => [
                         'name' => $cartItem['name'],
-                    ]
+                    ],
                 ],
                 'quantity' => $cartItem['quantity'],
             ];
@@ -63,10 +74,10 @@ class CheckoutPage extends Component
                 'currency' => 'usd',
                 'shipping_amount' => 0,
                 'shipping_method' => 'none',
-                'notes' => 'order placed by' . auth()->user()->name
+                'notes' => 'order placed by'.auth()->user()->name,
             ]);
 
-            $address =Address::create([
+            $address = Address::create([
                 'first_name' => $this->first_name,
                 'last_name' => $this->last_name,
                 'phone' => $this->phone,
@@ -78,39 +89,42 @@ class CheckoutPage extends Component
 
             $redirectUrl = '';
 
-            if ($this->payment_method === 'stripe'){
-//                Strip::setApiKey(env('STRIPE_SECRET'));
-//                $sessionCheckout = Session::create([
-//                    'payment_method_types' => ['card'],
-//                    'customer_email' => auth()->user()->email,
-//                    'line_items' => $lineItems,
-//                    'mode' => 'payment',
-//                    'success_url' => route('success'),
-//                    'cancel_url' => route('cancel'),
-//                ]);
-//                $redirectUrl = $sessionCheckout->url;
-            }else{
+            if ($this->payment_method === 'stripe') {
+                //                Strip::setApiKey(env('STRIPE_SECRET'));
+                //                $sessionCheckout = Session::create([
+                //                    'payment_method_types' => ['card'],
+                //                    'customer_email' => auth()->user()->email,
+                //                    'line_items' => $lineItems,
+                //                    'mode' => 'payment',
+                //                    'success_url' => route('success'),
+                //                    'cancel_url' => route('cancel'),
+                //                ]);
+                //                $redirectUrl = $sessionCheckout->url;
+            } else {
                 $redirectUrl = route('success');
             }
 
             $address->update([
-                'order_id' => 1
+                'order_id' => $order->id,
             ]);
 
             $order->items()->createMany($cartItems);
             CartManagement::clearCartItems();
+
+            Mail::to(auth()->user())->send(new OrderPlaced($order));
 
             return redirect($redirectUrl);
 
         }
 
     }
+
     public function render()
     {
         $orderItems = CartManagement::getCartItemsFromCookie();
         $grandTotal = CartManagement::calculateTotalAmount($orderItems);
 
-        return view('livewire.checkout-page',[
+        return view('livewire.checkout-page', [
             'orderItems' => $orderItems,
             'grand_total' => $grandTotal,
         ]);
